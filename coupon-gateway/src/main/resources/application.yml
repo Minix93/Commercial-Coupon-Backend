@@ -1,0 +1,32 @@
+server:
+  port: 9000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8000/eureka/
+
+spring:
+  application:
+    name: coupon-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          route-id-prefix: /coupon
+      routes:
+        - id: eureka-client-coupon-template
+          uri: http://localhost:7001
+          predicates:
+            - name: Path
+              args: /coupon-template/**
+        - id: eureka-client-coupon-distribution
+          uri: http://localhost:7002
+          predicates:
+            - name: Path
+              args: /coupon-distribution/**
+      httpclient:
+        connect-timeout: 15000
+
+
+
